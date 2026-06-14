@@ -3,24 +3,230 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>SharpSense — a thinking puzzle for PMs</title>
+
+<title>SharpSense — a daily thinking puzzle for product managers</title>
+<meta name="description" content="A daily thinking puzzle for product managers. Short, sharp scenarios that train product judgment, not trivia. Try one free in your browser — now in private beta on iOS.">
+<link rel="canonical" href="https://sharpsense.app/">
+<meta name="robots" content="index,follow">
+<meta name="theme-color" content="#121310">
+<meta name="color-scheme" content="dark">
+
+<!-- Favicons -->
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+<!-- Open Graph -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="SharpSense">
+<meta property="og:url" content="https://sharpsense.app/">
+<meta property="og:title" content="SharpSense — a daily thinking puzzle for product managers">
+<meta property="og:description" content="Short, sharp scenarios that train product judgment, not trivia. Try one in your browser. Now in private beta on iOS.">
+<meta property="og:image" content="https://sharpsense.app/og.png">
+<meta property="og:image:type" content="image/png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="SharpSense — a daily thinking puzzle for product managers">
+
+<!-- Twitter / X -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="SharpSense — a daily thinking puzzle for product managers">
+<meta name="twitter:description" content="Short, sharp scenarios that train product judgment, not trivia. Try one in your browser. Now in private beta on iOS.">
+<meta name="twitter:image" content="https://sharpsense.app/og.png">
+<meta name="twitter:image:alt" content="SharpSense — a daily thinking puzzle for product managers">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "SharpSense",
+  "applicationCategory": "EducationalApplication",
+  "operatingSystem": "iOS",
+  "description": "A daily thinking puzzle for product managers — short, sharp scenarios that train product judgment, not trivia.",
+  "url": "https://sharpsense.app/",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+}
+</script>
+
 <style>
-  body { background:#121310; color:#E8E6DF; font-family: ui-monospace, "SF Mono", Menlo, monospace;
-         display:flex; min-height:100vh; align-items:center; justify-content:center; margin:0; }
-  main { text-align:center; padding:24px; }
-  h1 { font-size: 34px; letter-spacing: -0.5px; color:#FFFFFF; margin: 12px 0 6px; }
-  h1 .accent { color:#C8FF4D; }
-  p { color:#9A988F; font-size: 14px; }
-  .caret { color:#C8FF4D; font-size: 40px; font-weight:bold; line-height:1; }
-  a { color:#C8FF4D; }
+  :root{
+    --bg:#121310; --surface:#191A15; --line:#2A2C23;
+    --ink:#E8E6DF; --dim:#9A988F; --lime:#C8FF4D; --trap:#E8776B;
+    --r:14px;
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font-family: ui-monospace, "SF Mono", "Menlo", monospace;
+    line-height:1.6; font-size:15px;
+    -webkit-font-smoothing:antialiased;
+  }
+  main{ max-width:600px; margin:0 auto; padding:56px 22px 72px; }
+  a{ color:var(--lime); }
+
+  /* ── Hero ───────────────────────────── */
+  .hero{ text-align:center; }
+  .mark{ width:48px; height:48px; display:inline-block; }
+  .mark path{ stroke-dasharray:120; stroke-dashoffset:120; animation:draw .9s ease forwards .1s; }
+  h1{ font-size:38px; letter-spacing:-1px; margin:14px 0 4px; color:#fff; }
+  h1 .accent{ color:var(--lime); }
+  .tagline{ font-size:19px; color:#fff; margin:0 0 10px; letter-spacing:-.3px; }
+  .sub{ color:var(--dim); margin:0 auto; max-width:42ch; }
+
+  /* ── Teaser ─────────────────────────── */
+  .teaser{ margin:44px 0 0; }
+  .kicker{ text-align:center; color:var(--dim); font-size:12px; letter-spacing:2px;
+           text-transform:uppercase; margin:0 0 14px; }
+  .card{ background:var(--surface); border:1px solid var(--line); border-radius:var(--r);
+         padding:22px 20px; }
+  .stream{ color:var(--lime); font-size:11px; letter-spacing:2px; text-transform:uppercase; }
+  .prompt{ font-size:17px; color:#fff; margin:8px 0 18px; line-height:1.45; }
+  .options{ display:flex; flex-direction:column; gap:9px; }
+  .opt{
+    appearance:none; text-align:left; width:100%; cursor:pointer;
+    background:#15160F; color:var(--ink); border:1px solid var(--line);
+    border-radius:10px; padding:13px 14px; font:inherit; font-size:14.5px;
+    display:flex; align-items:center; gap:11px; transition:border-color .15s, background .15s, transform .05s;
+  }
+  .opt:hover{ border-color:#4a4d3e; }
+  .opt:active{ transform:translateY(1px); }
+  .opt .dot{ width:9px; height:9px; border-radius:50%; background:#3a3c31; flex:none; transition:background .2s; }
+  .opt .tag{ margin-left:auto; font-size:11px; letter-spacing:1px; text-transform:uppercase;
+             opacity:0; color:var(--dim); flex:none; }
+  /* revealed states */
+  .revealed .opt{ cursor:default; }
+  .revealed .opt .tag{ opacity:1; }
+  .opt.best{ border-color:var(--lime); background:rgba(200,255,77,.08); }
+  .opt.best .dot{ background:var(--lime); } .opt.best .tag{ color:var(--lime); }
+  .opt.trap{ border-color:var(--trap); background:rgba(232,119,107,.08); }
+  .opt.trap .dot{ background:var(--trap); } .opt.trap .tag{ color:var(--trap); }
+  .opt.weaker .dot,.opt.weak .dot{ background:#6b6d5c; }
+  .opt.picked{ box-shadow:0 0 0 1px currentColor inset; }
+
+  .reveal{ margin-top:16px; border-top:1px solid var(--line); padding-top:15px;
+           opacity:0; max-height:0; overflow:hidden; transition:opacity .3s, max-height .3s; }
+  .reveal.show{ opacity:1; max-height:420px; }
+  .reveal .line{ margin:0 0 10px; font-size:14px; }
+  .reveal .lab{ color:var(--dim); }
+  .reveal .why{ color:var(--ink); }
+  .reveal .principle{ color:var(--lime); border-left:2px solid var(--lime);
+                      padding-left:11px; margin:14px 0 4px; }
+  .again{ background:none; border:none; color:var(--dim); font:inherit; font-size:13px;
+          cursor:pointer; padding:6px 0 0; text-decoration:underline; }
+  .again:hover{ color:var(--ink); }
+  .teaser-foot{ text-align:center; color:var(--dim); font-size:13px; margin:16px auto 0; max-width:46ch; }
+
+  /* ── CTA ────────────────────────────── */
+  .cta{ text-align:center; margin:40px 0 0; }
+  .btn{
+    display:inline-block; background:var(--lime); color:#10110B; text-decoration:none;
+    font-weight:700; font-size:16px; letter-spacing:-.2px;
+    padding:15px 26px; border-radius:4px; /* sharp-ish: the edge motif */
+    transition:transform .08s, box-shadow .15s, filter .15s;
+  }
+  .btn:hover{ filter:brightness(1.06); box-shadow:0 6px 24px -8px rgba(200,255,77,.5); }
+  .btn:active{ transform:translateY(1px); }
+  .cta-meta{ color:var(--dim); font-size:13px; margin:12px 0 0; }
+  .cta-note{ color:#7d7f70; font-size:12px; margin:6px 0 0; }
+
+  footer{ text-align:center; color:var(--dim); font-size:13px; margin-top:46px; }
+  footer a{ color:var(--dim); } footer a:hover{ color:var(--lime); }
+
+  @keyframes draw{ to{ stroke-dashoffset:0; } }
+  @media (prefers-reduced-motion: reduce){
+    .mark path{ animation:none; stroke-dashoffset:0; }
+    .opt,.btn,.reveal{ transition:none; }
+  }
 </style>
 </head>
 <body>
 <main>
-  <div class="caret">^</div>
-  <h1>Sharp<span class="accent">Sense</span></h1>
-  <p>a thinking puzzle for product managers<br>coming soon to the App Store</p>
-  <p><a href="privacy.html">privacy</a></p>
+
+  <header class="hero">
+    <svg class="mark" viewBox="0 0 64 64" aria-label="SharpSense logo">
+      <path d="M14 46 L32 17 L50 46" fill="none" stroke="#C8FF4D" stroke-width="8"
+            stroke-linecap="round" stroke-linejoin="miter" stroke-miterlimit="12"/>
+    </svg>
+    <h1>Sharp<span class="accent">Sense</span></h1>
+    <p class="tagline">Keep your product judgment sharp.</p>
+    <p class="sub">Short, sharp scenarios that train real product sense — judgment, not trivia.</p>
+  </header>
+
+  <section class="teaser" aria-label="Try a scenario">
+    <p class="kicker">Try one — no download</p>
+    <div class="card" id="card">
+      <div class="stream">Product sense</div>
+      <p class="prompt">A customer asks for a CSV export button. What is the sharpest first move?</p>
+      <div class="options" id="options">
+        <button class="opt" data-tier="trap" data-trap="solution-before-problem"
+          data-why="Jumps to their proposed fix before knowing the need; the export may not solve their actual job.">
+          <span class="dot"></span><span>Build the CSV export they asked for</span><span class="tag">Trap</span></button>
+        <button class="opt" data-tier="best"
+          data-why="The request is a guess at a fix; learning the job behind it tells you what to actually build.">
+          <span class="dot"></span><span>Ask what they will do with the data</span><span class="tag">Sharpest</span></button>
+        <button class="opt" data-tier="weak" data-trap="single-account-skew"
+          data-why="Lets one large customer set the roadmap; their stated fix is not evidence of a broad real problem.">
+          <span class="dot"></span><span>Ship it because they are a big account</span><span class="tag">Weak</span></button>
+        <button class="opt" data-tier="weaker"
+          data-why="Sizing demand helps, but it counts heads for one solution rather than uncovering the underlying job.">
+          <span class="dot"></span><span>Check how many users want exports</span><span class="tag">Weaker</span></button>
+      </div>
+      <div class="reveal" id="reveal" aria-live="polite">
+        <p class="line"><span class="lab" id="r-verdict"></span> <span class="why" id="r-why"></span></p>
+        <p class="line"><span class="lab">Sharpest move —</span> <span class="why" id="r-best"></span></p>
+        <p class="line principle">Principle: Find the job behind a feature request before building it.</p>
+        <button class="again" id="again">try another option ↺</button>
+      </div>
+    </div>
+    <p class="teaser-foot">Every option teaches. That’s 1 of 400 scenarios across 8 streams — plus a daily warm-up.</p>
+  </section>
+
+  <section class="cta">
+    <a class="btn" href="https://testflight.apple.com/join/Ar91Dr6G">Join the TestFlight beta&nbsp;→</a>
+    <p class="cta-meta">iPhone · free · TestFlight app required</p>
+    <p class="cta-note">Private beta — opens on Apple’s approval (this week).</p>
+  </section>
+
+  <footer>
+    <a href="/privacy.html">privacy</a> &nbsp;·&nbsp; <a href="mailto:gachiranjeevi@gmail.com">contact</a>
+  </footer>
+
 </main>
+
+<script>
+(function(){
+  var opts = document.getElementById('options');
+  var card = document.getElementById('card');
+  var reveal = document.getElementById('reveal');
+  var buttons = Array.prototype.slice.call(opts.querySelectorAll('.opt'));
+  var bestText = "Ask what they will do with the data";
+  var bestWhy  = buttons.filter(function(b){return b.dataset.tier==='best';})[0].dataset.why;
+  var LABEL = { best:"Sharp — that’s the strongest move.", weaker:"Reasonable, but not the sharpest.",
+                weak:"Weak move.", trap:"Trap" };
+
+  function reset(){
+    card.classList.remove('revealed');
+    reveal.classList.remove('show');
+    buttons.forEach(function(b){ b.classList.remove('best','trap','weaker','weak','picked'); b.disabled=false; });
+  }
+  function pick(b){
+    if(card.classList.contains('revealed')) return;
+    card.classList.add('revealed');
+    buttons.forEach(function(x){ x.classList.add(x.dataset.tier); x.disabled=true; });
+    b.classList.add('picked');
+    var tier = b.dataset.tier;
+    var verdict = LABEL[tier];
+    if(tier==='trap' && b.dataset.trap) verdict = "Trap — " + b.dataset.trap + ".";
+    if(tier==='weak' && b.dataset.trap) verdict = "Weak — " + b.dataset.trap + ".";
+    document.getElementById('r-verdict').textContent = verdict;
+    document.getElementById('r-why').textContent = b.dataset.why;
+    document.getElementById('r-best').textContent = '“' + bestText + '” — ' + bestWhy;
+    reveal.classList.add('show');
+  }
+  buttons.forEach(function(b){ b.addEventListener('click', function(){ pick(b); }); });
+  document.getElementById('again').addEventListener('click', reset);
+})();
+</script>
 </body>
 </html>
