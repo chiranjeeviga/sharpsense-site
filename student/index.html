@@ -129,6 +129,10 @@
   .btn:active{ transform:translateY(1px); }
   .cta-meta{ color:var(--dim); font-size:13px; margin:12px 0 0; }
   .cta-note{ color:#7d7f70; font-size:12px; margin:6px 0 0; }
+  .cta-head{ color:#fff; font-size:16px; margin:0 0 16px; letter-spacing:-.2px; }
+  .cta-buttons{ display:flex; gap:12px; justify-content:center; flex-wrap:wrap; }
+  .btn-android{ background:#15160F; color:var(--lime); border:1px solid var(--lime); }
+  .btn-android:hover{ background:rgba(200,255,77,.08); box-shadow:none; }
 
   footer{ text-align:center; color:var(--dim); font-size:13px; margin-top:46px; }
   footer a{ color:var(--dim); } footer a:hover{ color:var(--lime); }
@@ -186,9 +190,13 @@
   </section>
 
   <section class="cta">
-    <a class="btn" href="https://testflight.apple.com/join/SyJPAQPr">Join the TestFlight beta&nbsp;→</a>
-    <p class="cta-meta">iPhone · free · TestFlight app required</p>
-    <p class="cta-note">Private beta, opens on Apple's approval. Android coming via Google Play.</p>
+    <p class="cta-head">Join the free private beta</p>
+    <div class="cta-buttons">
+      <a class="btn" href="https://testflight.apple.com/join/SyJPAQPr">iPhone &middot; TestFlight&nbsp;→</a>
+      <a class="btn btn-android" href="https://appdistribution.firebase.dev/i/03aa2ddd8a8c744c">Android&nbsp;→</a>
+    </div>
+    <p class="cta-meta">iPhone needs the free TestFlight app. Android installs directly.</p>
+    <p class="cta-note">iPhone opens on Apple's review. Android is moving to Google Play soon.</p>
   </section>
 
   <footer>
